@@ -9,6 +9,9 @@
 !.env.example
 
 # Python
+.coverage
+htmlcov/
+coverage/
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -20,6 +23,8 @@ build/
 *.egg-info/
 
 # Node
+.vercel/
+*.tsbuildinfo
 node_modules/
 .next/
 out/
