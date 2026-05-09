@@ -13,6 +13,10 @@ class Settings(BaseSettings):
     chroma_port: int = 8001
     chroma_collection: str = "knowledge_chunks"
     cors_origins: list[str] = ["http://localhost:3000"]
+    llm_model: str = "gpt-4o-mini"
+    embedding_model: str = "text-embedding-3-small"
+    max_upload_size_mb: int = 50
+    secret_key: str = "dev-secret-change-me"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
