@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     chroma_host: str = "localhost"
     chroma_port: int = 8001
     chroma_collection: str = "knowledge_chunks"
-    cors_origins: list[str] = ["http://localhost:3000"]
+    cors_origins: list[str] = ["http://localhost:3000", "http://localhost:3001"]
     llm_model: str = "gpt-4o-mini"
     embedding_model: str = "text-embedding-3-small"
     max_upload_size_mb: int = 50
