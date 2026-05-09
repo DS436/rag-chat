@@ -34,7 +34,55 @@ services:
     volumes:
       - chroma_data:/chroma/chroma
 
+  backend:
+    build:
+      context: ./backend
+    entrypoint: ["/bin/sh", "/app/entrypoint.sh"]
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://rag:rag@postgres:5432/rag_knowledge_base
+      REDIS_URL: redis://redis:6379/0
+      CHROMA_HOST: chroma
+      CHROMA_PORT: 8000
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    volumes:
+      - uploads:/app/storage/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      chroma:
+        condition: service_started
+
+  worker:
+    build:
+      context: ./backend
+    command: python worker.py
+    environment:
+      DATABASE_URL: postgresql+psycopg://rag:rag@postgres:5432/rag_knowledge_base
+      REDIS_URL: redis://redis:6379/0
+      CHROMA_HOST: chroma
+      CHROMA_PORT: 8000
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    volumes:
+      - uploads:/app/storage/uploads
+    depends_on:
+      - backend
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+    ports:
+      - "3001:3000"
+    depends_on:
+      - backend
+
 volumes:
   postgres_data:
   redis_data:
   chroma_data:
+  uploads:
